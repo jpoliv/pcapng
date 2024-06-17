@@ -5,8 +5,8 @@
 Network Working Group                                     G. Harris, Ed.
 Internet-Draft                                                          
 Intended status: Informational                             M. Richardson
-Expires: 4 October 2024                                        Sandelman
-                                                            2 April 2024
+Expires: 19 December 2024                                      Sandelman
+                                                            17 June 2024
 
 
                         PCAP Capture File Format
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 October 2024.
+   This Internet-Draft will expire on 19 December 2024.
 
 Copyright Notice
 
@@ -404,9 +404,9 @@ Table of Contents
    [I-D.ietf-opsawg-pcaplinktype]
               Harris, G. and M. Richardson, "Link-Layer Types for PCAP
               and PCAPNG Capture File Formats", Work in Progress,
-              Internet-Draft, draft-ietf-opsawg-pcaplinktype-02, 30
-              January 2024, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-opsawg-pcaplinktype-02>.
+              Internet-Draft, draft-ietf-opsawg-pcaplinktype-03, 26
+              April 2024, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-opsawg-pcaplinktype-03>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
