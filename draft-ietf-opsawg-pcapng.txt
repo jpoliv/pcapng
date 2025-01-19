@@ -5,7 +5,7 @@
 Network Working Group                                     M. Tuexen, Ed.
 Internet-Draft                          Muenster Univ. of Appl. Sciences
 Intended status: Informational                                  F. Risso
-Expires: 2 July 2025                               Politecnico di Torino
+Expires: 23 July 2025                              Politecnico di Torino
                                                              J. Bongertz
                                                  Airbus DS CyberSecurity
                                                                 G. Combs
@@ -16,7 +16,7 @@ Expires: 2 July 2025                               Politecnico di Torino
                                                                  Red Hat
                                                            M. Richardson
                                                                Sandelman
-                                                        29 December 2024
+                                                         19 January 2025
 
 
            PCAP Next Generation (pcapng) Capture File Format
@@ -58,11 +58,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 July 2025.
+   This Internet-Draft will expire on 23 July 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -195,13 +195,13 @@ Table of Contents
 
    The fields have the following meaning:
 
-   *  Block Type (32 bits): a unique unsigned value that identifies the
-      block.  Values whose Most Significant Bit (MSB) is equal to 1 are
-      reserved for local use.  They can be used to make extensions to
-      the file format to save private data to the file.  The list of
+   *  Block Type (32 bits): a unique unsigned integer that identifies
+      the block.  Values whose Most Significant Bit (MSB) is equal to 1
+      are reserved for local use.  They can be used to make extensions
+      to the file format to save private data to the file.  The list of
       currently defined types can be found in Section 10.1.
 
-   *  Block Total Length (32 bits): an unsigned value giving the total
+   *  Block Total Length (32 bits): an unsigned integer giving the total
       size of this block, in octets.  For instance, the length of a
       block that does not have a body is 12 octets: 4 octets for the
       Block Type, 4 octets for the initial Block Total Length and 4
@@ -410,7 +410,7 @@ Table of Contents
    Options are a list of Type - Length - Value fields, each one
    containing a single value:
 
-   *  Option Type (16 bits): an unsigned value that contains the code
+   *  Option Type (16 bits): an unsigned integer that contains the code
       that specifies the type of the current TLV record.  Option types
       whose Most Significant Bit is equal to one are reserved for local
       use; therefore, there is no guarantee that the code used is unique
@@ -419,7 +419,7 @@ Table of Contents
       vendor-specific extensions, the Custom Option MUST be used
       instead, as defined in Section 3.5.1).
 
-   *  Option Length (16 bits): an unsigned value that contains the
+   *  Option Length (16 bits): an unsigned integer that contains the
       actual length of the following 'Option Value' field without the
       padding octets.
 
@@ -599,7 +599,7 @@ Table of Contents
 3.6.1.  Endianness
 
    Data contained in each section will always be saved according to the
-   characteristics (little endian / big endian) of the capturing
+   characteristics (little-endian / big-endian) of the capturing
    machine.  This refers to all the fields that are saved as numbers and
    that span over two or more octets.
 
@@ -705,16 +705,17 @@ Table of Contents
       machines from the ones saved on big-endian machines, and to
       heuristically identify pcapng files.
 
-   *  Major Version (16 bits): an unsigned value, giving the number of
+   *  Major Version (16 bits): an unsigned integer, giving the number of
       the current major version of the format.  The value for the
-      current version of the format is 1.
+      current version of the format is 1 (big-endian 0x00 0x01 or
+      little-endian 0x01 0x00).
 
-   *  Minor Version (16 bits): an unsigned value, giving the number of
+   *  Minor Version (16 bits): an unsigned integer, giving the number of
       the current minor version of the format.  The value for the
       current version of the format is 0.
 
-   *  Section Length (64 bits): a signed value specifying the length in
-      octets of the following section, excluding the Section Header
+   *  Section Length (64 bits): a signed integer specifying the length
+      in octets of the following section, excluding the Section Header
       Block itself.  This field can be used to skip the section, for
       faster navigation inside large files.  If the Section Length is -1
       (0xFFFFFFFFFFFFFFFF), this means that the size of the section is
@@ -840,7 +841,7 @@ Table of Contents
    describing an interface on which packet data is captured.
 
    Tools that write / read the capture file associate an incrementing
-   unsigned 32-bit number (starting from '0') to each Interface
+   32-bit unsigned integer (starting from '0') to each Interface
    Definition Block, called the Interface ID for the interface in
    question.  This number is unique within each Section and identifies
    the interface to which the IDB refers; it is only unique inside the
@@ -898,17 +899,17 @@ Table of Contents
    *  Block Total Length: total size of this block, as described in
       Section 3.1.
 
-   *  LinkType (16 bits): an unsigned value that defines the link layer
-      type of this interface.  The list of Standardized Link Layer Type
-      codes is available in [I-D.richardson-opsawg-pcaplinktype].
+   *  LinkType (16 bits): an unsigned integer that defines the link
+      layer type of this interface.  The list of Standardized Link Layer
+      Type codes is available in [I-D.richardson-opsawg-pcaplinktype].
 
    *  Reserved (16 bits): not used - MUST be filled with 0 by pcapng
       file writers, and MUST be ignored by pcapng file readers.
 
-   *  SnapLen (32 bits): an unsigned value indicating the maximum number
-      of octets captured from each packet.  The portion of each packet
-      that exceeds this value will not be stored in the file.  A value
-      of zero indicates no limit.
+   *  SnapLen (32 bits): an unsigned integer indicating the maximum
+      number of octets captured from each packet.  The portion of each
+      packet that exceeds this value will not be stored in the file.  A
+      value of zero indicates no limit.
 
    *  Options: optionally, a list of options (formatted according to the
       rules defined in Section 3.5) can be present.
@@ -1010,8 +1011,8 @@ Table of Contents
    Example: '02 34 56 FF FE 78 9A BC'.
 
    if_speed:
-           The if_speed option is a 64-bit unsigned value indicating the
-           interface speed, in bits per second.
+           The if_speed option is a 64-bit unsigned integer indicating
+           the interface speed, in bits per second.
 
    Example: the 64-bit decimal number 100000000 for 100Mbps.
 
@@ -1064,7 +1065,7 @@ Table of Contents
    Examples: "Windows XP SP2", "openSUSE 10.2".
 
    if_fcslen:
-           The if_fcslen option is an 8-bit unsigned integer value that
+           The if_fcslen option is an 8-bit unsigned integer that
            specifies the length of the Frame Check Sequence (in bits)
            for this interface.  For link layers whose FCS length can
            change during time, the Enhanced Packet Block epb_flags
@@ -1074,7 +1075,7 @@ Table of Contents
    Example: '4'.
 
    if_tsoffset:
-           The if_tsoffset option is a 64-bit signed integer value that
+           The if_tsoffset option is a 64-bit signed integer that
            specifies an offset (in seconds) that must be added to the
            timestamp of each packet to obtain the absolute timestamp of
            a packet.  If the option is not present, an offset of 0 is
@@ -1095,13 +1096,13 @@ Table of Contents
    Connection", "NETGEAR WNA1000Mv2 N150 Wireless USB Micro Adapter".
 
    if_txspeed:
-           The if_txspeed option is a 64-bit unsigned value indicating
+           The if_txspeed option is a 64-bit unsigned integer indicating
            the interface transmit speed in bits per second.
 
    Example: the 64-bit decimal number 1024000 for 1024Kbps.
 
    if_rxspeed:
-           The if_rxspeed option is a 64-bit unsigned value indicating
+           The if_rxspeed option is a 64-bit unsigned integer indicating
            the interface receive speed, in bits per second.
 
    Example: the 64-bit decimal number 8192000 for 8192Kbps.
@@ -1134,7 +1135,7 @@ Table of Contents
    The Enhanced Packet Block is an improvement over the original, now
    obsolete, Packet Block (Appendix A):
 
-   *  it stores the Interface Identifier as a 32-bit integer value.
+   *  it stores the Interface Identifier as a 32-bit unsigned integer.
       This is a requirement when a capture stores packets coming from a
       large number of interfaces;
 
@@ -1181,7 +1182,7 @@ Table of Contents
    *  Block Total Length: total size of this block, as described in
       Section 3.1.
 
-   *  Interface ID (32 bits): an unsigned value that specifies the
+   *  Interface ID (32 bits): an unsigned integer that specifies the
       interface on which this packet was received or transmitted; the
       correct interface will be the one whose Interface Description
       Block (within the current Section of the file) is identified by
@@ -1189,7 +1190,7 @@ Table of Contents
       MUST be valid, which means that an matching interface description
       block MUST exist.
 
-   *  Timestamp (64 bits): two 32-bit unsigned values, representing a
+   *  Timestamp (64 bits): two 32-bit unsigned integers, representing a
       single 64-bit unsigned integer, with the first value being the
       upper 32 bits of that integer and the second value being the lower
       32 bits of that integer.  The 64-bit unsigned integer is a count
@@ -1210,22 +1211,23 @@ Table of Contents
       saved as two 32-bit words that represent the upper and lower 32
       bits of a single 64-bit quantity.
 
-   *  Captured Packet Length (32 bits): an unsigned value that indicates
-      the number of octets captured from the packet (i.e., the length of
-      the Packet Data field).  It will be the minimum value among the
-      Original Packet Length and the snapshot length for the interface
-      (SnapLen, defined in Figure 10).  The value of this field does not
-      include the padding octets added at the end of the Packet Data
-      field to align the Packet Data field to a 32-bit boundary.
+   *  Captured Packet Length (32 bits): an unsigned integer that
+      indicates the number of octets captured from the packet (i.e., the
+      length of the Packet Data field).  It will be the minimum value
+      among the Original Packet Length and the snapshot length for the
+      interface (SnapLen, defined in Figure 10).  The value of this
+      field does not include the padding octets added at the end of the
+      Packet Data field to align the Packet Data field to a 32-bit
+      boundary.
 
-   *  Original Packet Length (32 bits): an unsigned value that indicates
-      the number of octets of packet data that would have been provided
-      had the packet not been truncated to the snapshot length for the
-      interface or to a length limit imposed by the capture mechanism.
-      If no truncation was done, it will be the same as the Captured
-      Packet Length, but it will be different from the Captured Packet
-      Length if the packet has been truncated by the capture process.
-      It SHOULD NOT be less than the Captured Packet Length.
+   *  Original Packet Length (32 bits): an unsigned integer that
+      indicates the number of octets of packet data that would have been
+      provided had the packet not been truncated to the snapshot length
+      for the interface or to a length limit imposed by the capture
+      mechanism.  If no truncation was done, it will be the same as the
+      Captured Packet Length, but it will be different from the Captured
+      Packet Length if the packet has been truncated by the capture
+      process.  It SHOULD NOT be less than the Captured Packet Length.
 
       A pcapng file writer MAY write an Original Packet Length that is
       less than the Captured Packet Length if both the Captured Packet
@@ -1304,7 +1306,7 @@ Table of Contents
    9A 3D 50 8E'.
 
    epb_dropcount:
-           The epb_dropcount option is a 64-bit unsigned integer value
+           The epb_dropcount option is a 64-bit unsigned integer
            specifying the number of packets lost (by the interface and
            the operating system) between this packet and the preceding
            one for the same interface or, for the first packet for an
@@ -1372,10 +1374,10 @@ Table of Contents
 
 4.3.1.  Enhanced Packet Block Flags Word
 
-   The Enhanced Packet Block Flags Word is a 32-bit value that contains
-   link-layer information about the packet.
+   The Enhanced Packet Block Flags Word contains link-layer information
+   about the packet.
 
-   The word is encoded as an unsigned 32-bit integer, using the
+   The word is encoded as a 32-bit unsigned integer, using the
    endianness of the Section Header Block scope it is in.  In the
    following table, the bits are numbered with 0 being the least-
    significant bit and 31 being the most-significant bit of the 32-bit
@@ -1488,8 +1490,8 @@ Table of Contents
    *  Block Total Length: total size of this block, as described in
       Section 3.1.
 
-   *  Original Packet Length (32 bits): an unsigned value indicating the
-      actual length of the packet when it was transmitted on the
+   *  Original Packet Length (32 bits): an unsigned integer indicating
+      the actual length of the packet when it was transmitted on the
       network.  It can be different from length of the Packet Data
       field's length if the packet has been truncated by the capture
       process, in which case the SnapLen value in Section 4.2 will be
@@ -1749,7 +1751,7 @@ Table of Contents
    *  Block Total Length: total size of this block, as described in
       Section 3.1.
 
-   *  Interface ID (32 bits): an unsigned value that specifies the
+   *  Interface ID (32 bits): an unsigned integer that specifies the
       interface to which these statistics refer; the correct interface
       will be the one whose Interface Description Block (within the
       current Section of the file) is identified by the same number (see
@@ -1757,7 +1759,7 @@ Table of Contents
       means that an matching interface description block MUST exist.
 
    *  Timestamp (64 bits): the time at which the statistics values were
-      taken; two 32-bit unsigned values, in the same format as defined
+      taken; two 32-bit unsigned integers, in the same format as defined
       for timestamps in the Enhanced Packet Block (Section 4.3), using
       the 'if_tsresol' and 'if_tsoffset' values from the Interface
       Description Block specified by the Interface ID.
@@ -1792,10 +1794,10 @@ Table of Contents
 
    isb_starttime:
            The isb_starttime option specifies the time that traffic
-           capture started on this interface, consisting of two unsigned
-           32-bit values, in the same format as defined for timestamps
-           in the Enhanced Packet Block (Section 4.3), using the
-           'if_tsresol' and 'if_tsoffset' values from the Interface
+           capture started on this interface, consisting of two 32-bit
+           unsigned integers, in the same format as defined for
+           timestamps in the Enhanced Packet Block (Section 4.3), using
+           the 'if_tsresol' and 'if_tsoffset' values from the Interface
            Description Block specified by the Interface ID.
 
    Example: '96 c3 04 00 73 89 6a 65', in Little Endian, decodes to
@@ -1803,10 +1805,10 @@ Table of Contents
 
    isb_endtime:
            The isb_endtime option specifies the time that traffic
-           capture ended on this interface, consisting of two unsigned
-           32-bit values, in the same format as defined for timestamps
-           in the Enhanced Packet Block (Section 4.3), using the
-           'if_tsresol' and 'if_tsoffset' values from the Interface
+           capture ended on this interface, consisting of two 32-bit
+           unsigned integers, in the same format as defined for
+           timestamps in the Enhanced Packet Block (Section 4.3), using
+           the 'if_tsresol' and 'if_tsoffset' values from the Interface
            Description Block specified by the Interface ID.
 
    Example: '97 c3 04 00 aa 47 ca 64', in Little Endian, decodes to
@@ -1920,7 +1922,7 @@ Table of Contents
    0x5353484b:
            SSH Key Log. Every line consists of a cookie, key type, and
            key separated by one space.  The cookie is the hex-encoded
-           (client or server) 16 bytes cookie (32 characters) found in
+           (client or server) 16 octets cookie (32 characters) found in
            the SSH_MSG_KEXINIT sent during algorithm negotiation
            (https://datatracker.ietf.org/doc/html/rfc4253#section-7.1)
            by the endpoint whose private random is disclosed.  The key
@@ -1967,11 +1969,11 @@ Table of Contents
 
            *  Token ID: Encoded as decimal value.
 
-           The _value_ contains the key data encoded as hexadecimal
-           string with upper case letters.  To create a valid keyset,
-           four entries for one combination of secure channel ID and
-           token ID are required.  These entries include 'iv' and 'key'
-           for both 'server' and 'client'.
+           The value contains the key data encoded as hexadecimal string
+           with upper case letters.  To create a valid keyset, four
+           entries for one combination of secure channel ID and token ID
+           are required.  These entries include 'iv' and 'key' for both
+           'server' and 'client'.
 
            Currently, AES-128-CBC and AES-256-CBC are supported
            encryption algorithms:
@@ -2023,7 +2025,7 @@ Table of Contents
            The NWK Key is a 16 octet binary AES-128 key used to secure
            NWK Level frames within a single PAN.  The NWK key is
            immediately followed by the 2-octet (16-bit) network PANID in
-           little endian format.  If and when the NWK Key changes a new
+           little-endian format.  If and when the NWK Key changes a new
            DSB will contain the new NWK Key.
 
    0x5a415053:
@@ -2032,8 +2034,8 @@ Table of Contents
            05-3473-21 (R21) section 4.4.  Each 16 octet binary AES-128
            key secures frames exchanged between a pair of network nodes.
            The APS Key is immediately followed by the 2-octet (16-bit)
-           network PANID in little endian format.  The PANID is followed
-           by the 2-octet (16-bit) short addresses, in little endian
+           network PANID in little-endian format.  The PANID is followed
+           by the 2-octet (16-bit) short addresses, in little-endian
            format, of the nodes to which the APS Key applies.  The
            numerically lower short address shall come first.  There is
            an APS Key DSB for each node pair for which the Link Key is
@@ -2333,8 +2335,8 @@ Table of Contents
 
 10.1.  Standardized Block Type Codes
 
-   Every Block is uniquely identified by a 32-bit integer value, stored
-   in the Block Header.
+   Every Block is uniquely identified by a 32-bit unsigned integer,
+   stored in the Block Header.
 
    As pointed out in Section 3.1, Block Type codes whose Most
    Significant Bit (bit 31) is set to 1 are reserved for local use by
@@ -2582,7 +2584,7 @@ Appendix A.  Packet Block (obsolete!)
       hexadecimal) is reserved for those systems in which this
       information is not available.
 
-   *  Timestamp (64 bits): two 32-bit unsigned values, in the same
+   *  Timestamp (64 bits): two 32-bit unsigned integers, in the same
       format as defined for timestamps in the Enhanced Packet Block
       (Section 4.3), using the 'if_tsresol' and 'if_tsoffset' values
       from the Interface Description Block specified by the Interface
